@@ -1,0 +1,36 @@
+- git:
+    uri: https://github.com/MoriKen254/timed_roslaunch
+    local-name: timed_roslaunch
+    version: melodic-devel
+- git:
+    uri: https://github.com/YukiTakahashi4690/turtlebot3.git
+    local-name: turtlebot3
+    version: 3_cameras
+- git:
+    uri: https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git
+    local-name: turtlebot3_msgs
+    version: noetic-devel
+- git:
+    uri: https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
+    local-name: turtlebot3_simulations
+    version: noetic-devel
+- git:
+    uri: https://github.com/ROBOTIS-GIT/turtlebot3_gazebo_plugin.git
+    local-name: turtlebot3_gazebo_plugin
+    version: master
+- git:
+    uri: https://github.com/YukiTakahashi4690/nav_cloning.git
+    local-name: nav_cloning
+    version: master
+- git:
+    uri: https://github.com/YukiTakahashi4690/navigation.git
+    local-name: navigation
+    version: noetic-devel
+- git:
+    uri: https://github.com/YukiTakahashi4690/waypoint_nav.git
+    local-name: waypoint_nav
+    version: main
+- git:
+    uri: https://github.com/YukiTakahashi4690/conv_for_piechart.git
+    local-name: conv_for_piechart
+    version: main

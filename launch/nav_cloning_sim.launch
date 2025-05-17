@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<launch>
+      <!-- 使用するスクリプトの指定 -->
+      <arg name="script" default="nav_cloning_node.py"/>
+
+      <!-- 動作モードの設定 -->
+      <arg name="mode" default="use_dl_output"/>
+
+      <!-- 設定値 -->
+      <arg name="num" default="1"/>
+      <arg name="world_name" default="willow_garage.world"/>
+      <arg name="map_file" default="willowgarage.yaml"/>
+      <arg name="waypoints_file" default="willow_loop_waypoint_nav_shirasu.yaml"/>
+      <arg name="rate" default="0.1" />
+      <arg name="dist_err" default="0.8"/>
+
+      <!-- 初期位置の設定 -->
+      <arg name="initial_pose_x" default="-10.78" />
+      <arg name="initial_pose_y" default="-16.78" />
+      <arg name="initial_pose_a" default="0.0" />
+
+      <!-- ウェイポイントナビゲーションを使用するか -->
+      <arg name="use_waypoint_nav" default="true" />
+
+
+      <!-- Gazeboシミュレータを起動 -->
+      <include file="$(find gazebo_ros)/launch/empty_world.launch">
+      <arg name="world_name" value="$(find nav_cloning)/world/willow_garage.world"/>
+      <arg name="paused" value="false"/>
+      <arg name="use_sim_time" value="true"/>
+      <arg name="gui" value="true"/>
+      <arg name="headless" value="false"/>
+      <arg name="debug" value="false"/>
+      </include>
+
+      <!-- ロボットのスポーン -->
+      <param name="robot_description" command="$(find xacro)/xacro $(find turtlebot3_description)/urdf/turtlebot3_waffle_pi.urdf.xacro" />
+      <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model turtlebot3" 
+      launch-prefix="bash -c 'sleep 7; exec /opt/ros/noetic/lib/gazebo_ros/spawn_model -param robot_description -urdf -model turtlebot3'"/>
+
+      <!--データ収集（時間をずらして実行）デフォルトはnav_cloning_node.pyを使用 -->
+      <node pkg="timed_roslaunch" type="timed_roslaunch.sh"
+            args="10 nav_cloning nav_cloning.launch script:=$(arg script)"
+            name="timed_roslaunch" output="screen" />
+
+      <node pkg="timed_roslaunch" type="timed_roslaunch.sh"
+            args="15 nav_cloning turtlebot3_navigation.launch model:=waffle map_file:=$(find nav_cloning)/maps/$(arg map_file) waypoints_file:=$(find nav_cloning)/waypoint/$(arg waypoints_file) rate:=$(arg rate) dist_err:=$(arg dist_err) initial_pose_x:=$(arg initial_pose_x) initial_pose_y:=$(arg initial_pose_y) initial_pose_a:=$(arg initial_pose_a) use_waypoint_nav:=$(arg use_waypoint_nav)"
+            name="timed_roslaunch2" />
+
+      <!-- ウェイポイントナビゲーションの開始 -->
+      <!-- use_waypoint_nav が true のときだけ起動 -->
+      <node pkg="timed_roslaunch" type="timed_roslaunch.sh"
+            args="25 nav_cloning start_wp_nav.launch"
+            name="timed_roslaunch5"
+            if="$(arg use_waypoint_nav)" />
+            
+
+      
+</launch>

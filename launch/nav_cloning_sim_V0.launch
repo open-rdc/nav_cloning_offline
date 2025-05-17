@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="script" default="nav_cloning_node.py"/>
+  <!-- <arg name="script" default="set_collect.py"/> -->
+  <!-- <arg name="script" default="run_collect.py"/> -->
+  <!-- <arg name="script" default="run_collect_9cam.py"/> -->
+  <arg name="mode" default="use_dl_output"/>
+  <!-- <arg name="mode" default="follow_line"/> -->
+  <arg name="num" default="1"/>
+  <arg name="world_name" default="willow_garage.world"/>
+  <!-- <arg name="world_name" default="Tsudanuma_2-3.world"/> -->
+  <arg name="map_file" default="willowgarage.yaml"/>
+  <!-- <arg name="map_file" default="Tsudanuma_2-3.yaml"/> -->
+  <arg name="waypoints_file" default="willow_loop_waypoint_nav_shirasu.yaml"/>
+  <!-- <arg name="waypoints_file" default="Tsudanuma_2-3_loop.yaml"/> -->
+  <arg name="rate" default="0.1" />
+  <arg name="dist_err" default="0.8"/>
+  <!-- <arg name="dist_err" default="0.8"/> -->
+  <arg name="initial_pose_x" default="-9.20645" />
+  <arg name="initial_pose_y" default="-16.42460" />
+  <!-- <arg name="initial_pose_x" default="-9.5" /> -->
+  <!-- <arg name="initial_pose_y" default="-16.0" /> -->
+  <arg name="initial_pose_a" default="0.0" />
+  <!-- <arg name="initial_pose_x" default="-9.5" />
+  <arg name="initial_pose_y" default="29" />
+  <arg name="initial_pose_a" default="-1.57" /> -->
+  <arg name="use_waypoint_nav" default="true" />
+  <arg name="use_initpose" default="false" />
+  <arg name="robot_x" default="1.5" />
+  <arg name="robot_y" default="0.7" />
+  <arg name="robot_Y" default="0.0" />
+  <!-- <arg name="robot_x" default="-10.0" />
+  <arg name="robot_y" default="28.5" />
+  <arg name="robot_Y" default="-1.57" /> -->
+  <!-- <rosparam param="/nav_cloning_node/mode" subst_value="True">$(arg mode)</rosparam> -->
+  <rosparam param="/nav_cloning_node/num" subst_value="true">$(arg num)</rosparam>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find nav_cloning)/world/willow_garage.world"/>
+    <!-- <arg name="world_name" value="$(find nav_cloning)/world/Tsudanuma_2-3.world"/>  -->
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  
+  <!--スポーンの確認のため一時的にこちらを使用-->
+  <param name="robot_description" command="$(find xacro)/xacro $(find turtlebot3_description)/urdf/turtlebot3_waffle_pi.urdf.xacro" />
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model toio_style" />
+  <!--ここまで-->
+
+
+  <node pkg="timed_roslaunch" type="timed_roslaunch.sh"
+        args="5 nav_cloning nav_cloning.launch script:=$(arg script)"
+        name="timed_roslaunch" output="screen" />
+
+  <node pkg="timed_roslaunch" type="timed_roslaunch.sh"
+        args="8 nav_cloning turtlebot3_navigation.launch model:=waffle map_file:=$(find nav_cloning)/maps/$(arg map_file) waypoints_file:=$(find nav_cloning)/waypoint/$(arg waypoints_file) rate:=$(arg rate) dist_err:=$(arg dist_err) initial_pose_x:=$(arg initial_pose_x) initial_pose_y:=$(arg initial_pose_y) initial_pose_a:=$(arg initial_pose_a) use_waypoint_nav:=$(arg use_waypoint_nav)"
+        name="timed_roslaunch2" >
+  </node>
+
+  <!--node pkg="timed_roslaunch" type="timed_roslaunch.sh"
+        args="10 theta_simple_stitching simple_stitching.launch"
+        name="timed_roslaunch3" >      
+  </node -->
+
+  <!-- <node pkg="timed_roslaunch" type="timed_roslaunch.sh"
+        args="8 nav_cloning turtlebot3_navigation.launch model:=waffle map_file:=$(find nav_cloning)/maps/Tsudanuma_2-3.yaml waypoints_file:=$(find nav_cloning)/waypoint/Tsudanuma_2-3_loop.yaml"
+        name="timed_roslaunch2" >      
+  </node> -->
+
+  <node pkg="timed_roslaunch" type="timed_roslaunch.sh"
+        args="12 conv_for_piechart conv.launch"
+        name="timed_roslaunch4" >      
+  </node>
+
+  <node pkg="timed_roslaunch" type="timed_roslaunch.sh"
+        args="14 nav_cloning start_wp_nav.launch"
+        name="timed_roslaunch5" >
+  </node>
+</launch>

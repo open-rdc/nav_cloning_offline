@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- 使用するスクリプトの指定 -->
+  <arg name="script" default="run_collect.py"/>
+  
+  <!-- 動作モードの設定 -->
+  <arg name="mode" default="use_dl_output"/>
+  
+  <!-- 設定値 -->
+  <arg name="num" default="1"/>
+  <arg name="world_name" default="willow_garage.world"/>
+  <arg name="map_file" default="willowgarage.yaml"/>
+  <arg name="waypoints_file" default="willow_loop_waypoint_nav_shirasu.yaml"/>
+  <arg name="rate" default="0.1" />
+  <arg name="dist_err" default="0.8"/>
+  
+  <!-- 初期位置の設定 -->
+  <arg name="initial_pose_x" default="4" />
+  <arg name="initial_pose_y" default="0.6" />
+  <arg name="initial_pose_a" default="0.0" />
+  
+  <!-- ウェイポイントナビゲーションを使用するか -->
+  <arg name="use_waypoint_nav" default="true" />
+  
+
+  <!-- Gazeboシミュレータを起動 -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find nav_cloning)/world/willow_garage.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <!-- ロボットのスポーン -->
+  <param name="robot_description" command="$(find xacro)/xacro $(find turtlebot3_description)/urdf/turtlebot3_waffle_pi.urdf.xacro" />
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" 
+      args="-param robot_description -urdf -model turtlebot3 -x $(arg initial_pose_x) -y $(arg initial_pose_y) -z 0.0 -Y $(arg initial_pose_a)" />
+
+  <!-- 手動操作 -->
+  <node pkg="nav_cloning" type="keyboard_teleop.py" name="keyboard_teleop" output="screen"/>
+
+  <!-- データ収集（時間をずらして実行）デフォルトはnav_cloning_node.pyを使用 -->
+  <node pkg="timed_roslaunch" type="timed_roslaunch.sh"
+        args="12 nav_cloning nav_cloning.launch script:=$(arg script)"
+        name="timed_roslaunch" output="screen" />
+
+</launch>

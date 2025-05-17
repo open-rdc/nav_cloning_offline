@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+	<arg name="script" default="run_collect.py"/>
+    <node pkg="nav_cloning" type="$(arg script)" name="nav_cloning_node" output="screen"/>
+</launch>

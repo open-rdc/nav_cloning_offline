@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Arguments -->
+  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="map_file" default="$(find nav_cloning)/maps/willow_loop_waypoint_nav_shirasu.yaml"/>
+  <arg name="open_rviz" default="true"/>
+  <!--willow_garage-->
+  <arg name="initial_pose_x" default="-10.78" />
+  <arg name="initial_pose_y" default="-16.78" />
+  <arg name="initial_pose_a" default="0.0" />
+  <arg name="robot_x" default="1.5" />
+  <arg name="robot_y" default="0.7" />
+  <arg name="robot_Y" default="0.0" />
+
+  <!-- Turtlebot3 -->
+  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch">
+    <arg name="model" value="$(arg model)" />
+  </include>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find nav_cloning)/world/willow_garage.world"/>
+    <!-- <arg name="world_name" value="$(find nav_cloning)/world/Tsudanuma_2-3.world"/>  -->
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <include file="$(find theta_simple_stitching)/launch/simple_stitching.launch">
+  </include>
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_waffle_pi.urdf.xacro" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model mobile_base -x $(arg robot_x) -y $(arg robot_y) -z 0.0 -Y $(arg robot_Y) -param robot_description" />
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find turtlebot3_navigation)/rviz/navigation.rviz"/>
+  </group>
+
+</launch>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- 設定値 -->
+  <arg name="world_name" default="$(find nav_cloning)/world/willow_garage.world"/>
+  <arg name="robot" default="turtlebot3_waffle_pi"/>
+  
+  <!-- 使用するスクリプトの指定 -->
+  <arg name="script" default="image_to_cmd_vel.py"/>
+
+  <!-- 初期位置の設定 -->
+  <arg name="initial_pose_x" default="4" />
+  <arg name="initial_pose_y" default="0.6" />
+  <arg name="initial_pose_a" default="0.0" />
+  
+  
+  <!-- Gazeboシミュレータを起動 -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find nav_cloning)/world/willow_garage.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <!-- ロボットのURDFをパラメータサーバに設定 -->
+  <param name="robot_description" command="$(find xacro)/xacro $(find turtlebot3_description)/urdf/turtlebot3_waffle_pi.urdf.xacro" />
+
+  <!-- spawn_model ノード -->
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
+        args="-param robot_description -urdf -model turtlebot3 -x $(arg initial_pose_x) -y $(arg initial_pose_y) -z 0.0 -Y $(arg initial_pose_a)"
+        launch-prefix="bash -c 'sleep 7; exec /opt/ros/noetic/lib/gazebo_ros/spawn_model -param robot_description -urdf -model turtlebot3 -x $(arg initial_pose_x) -y $(arg initial_pose_y) -z 0.0 -Y $(arg initial_pose_a)'"/>
+
+  <!-- cmd_velを発行するカスタムノード（image_to_cmd_vel.py） -->
+  <node pkg="timed_roslaunch" type="timed_roslaunch.sh"
+        args="25 nav_cloning nav_cloning.launch script:=$(arg script)"
+        name="timed_roslaunch" output="screen" />
+</launch>
