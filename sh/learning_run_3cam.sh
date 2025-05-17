@@ -7,4 +7,4 @@
 # done
 
 # rosrun nav_cloning offline_learning_3cam.py 1
-rosrun nav_cloning offline_learning_3cam_random.py 1
+rosrun nav_cloning offline_learning_run_3cam.py 1
