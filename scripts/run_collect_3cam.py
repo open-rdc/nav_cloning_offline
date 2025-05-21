@@ -31,10 +31,10 @@ class cource_following_learning_node:
         self.bridge = CvBridge()
 
         #カメラからのデータをサブスクライブ
-        self.image_sub = rospy.Subscriber("/camera/rgb/image_raw", Image, self.callback)
-        self.image_left_sub = rospy.Subscriber("/camera_left/rgb/image_raw", Image, self.callback_left_camera)
-        self.image_right_sub = rospy.Subscriber("/camera_right/rgb/image_raw", Image, self.callback_right_camera)
-
+        self.image_sub = rospy.Subscriber("/camera/lane1/center/rgb/image_raw", Image, self.callback)
+        self.image_sub = rospy.Subscriber("/camera/lane2/center/rgb/image_raw", Image, self.callback_left_camera)
+        self.image_sub = rospy.Subscriber("/camera/lane3/center/rgb/image_raw", Image, self.callback_right_camera)
+        
         self.vel_sub = rospy.Subscriber("/cmd_vel", Twist, self.callback_vel, queue_size=10)
         self.odom_sub = rospy.Subscriber("/odom", Odometry, self.callback_odom)
         self.path_sub = rospy.Subscriber("/move_base/NavfnROS/plan", Path, self.callback_path)

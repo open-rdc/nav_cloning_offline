@@ -39,7 +39,7 @@ class GoalAngleSimulator:
         self.goal_pub = rospy.Publisher('/move_base_simple/goal', PoseStamped, queue_size=1)
 
         rospy.Subscriber('/nav_vel', Twist, self.nav_vel_callback)
-        rospy.Subscriber('/camera/rgb/image_raw', Image, self.image_callback)
+        rospy.Subscriber('/camera/lane1/center/rgb/image_raw', Image, self.image_callback)
         
         # 画像関連の準備
         self.bridge = CvBridge()
