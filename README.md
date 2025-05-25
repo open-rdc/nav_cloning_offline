@@ -7,21 +7,21 @@
     - データ収集後はangフォルダとimgフォルダ内にそれぞれ角速度と画像が保存される 
     - 現在の命名規則(img)例：lane1_center_1.jpg
 ```
-roslaunch nav_cloning nav_cloning_sim.launch script:=set_collect.py use_waypoint_nav:=false
+roslaunch nav_cloning nav_cloning_sim.launch script:=set_collect.py use_waypoint_nav:=false use_cmd_vel:=false
 ```
 - データ収集（走行） 3camもしくは9cam
 ```
 roslaunch nav_cloning nav_cloning_sim.launch script:=run_collect_3cam.py use_waypoint_nav:=true
 ```
 - オフライン学習
-    - シェル内で呼び出しているスクリプト(↓の場合はoffline_learning_3cam.py)のself.proを使用するデータフォルダ名に変更する
+    - シェル内で呼び出しているスクリプトのself.proを使用するデータフォルダ名に変更する
     - 同じくスクリプト内のself.dataもデータ数に応じて数値を変更させる
     - 配置したデータで学習
     ```
     roscd nav_cloning/sh
     ./learning.sh
     ```  
-    - 走行させたデータで学習
+    - 走行させたデータで学習  3camもしくは9cam
     ```
     roscd nav_cloning/sh
     ./learning_run_3cam.sh
@@ -29,11 +29,11 @@ roslaunch nav_cloning nav_cloning_sim.launch script:=run_collect_3cam.py use_way
 - 学習したモデルで経路追従できるかテスト
     ```
     roscd nav_cloning/sh
-    ./test.sh
+    ./model_test
     ```
-- 学習したモデルの出力のみを確認したい場合
+- 特定の学習したモデルの出力のみを確認したい場合
     ```
-    rosraunch nav_cloning model_test_only.launch
+    roslaunch nav_cloning nav_cloning_sim.launch script:="model_test.py" use_waypoint_nav:=true use_cmd_vel:=false model_num:=1
     ```
 
 ## install

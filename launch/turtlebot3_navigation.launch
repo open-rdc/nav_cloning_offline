@@ -32,7 +32,7 @@
   </include>
 
   <!-- Move Base (use_waypoint_navによって動作を分ける)-->
-  <group if="$(arg use_waypoint_nav)">
+  <group if="$(arg use_cmd_vel)">
     <!-- 通常のcmd_velを使う -->
     <include file="$(find turtlebot3_navigation)/launch/move_base.launch">
       <arg name="model" value="$(arg model)"/>
@@ -41,7 +41,7 @@
     </include>
   </group>
 
-  <group unless="$(arg use_waypoint_nav)">
+  <group unless="$(arg use_cmd_vel)">
     <!-- nav_velにリマップしてロボットを動かさない -->
     <include file="$(find turtlebot3_navigation)/launch/move_base.launch">
       <arg name="model" value="$(arg model)"/>
