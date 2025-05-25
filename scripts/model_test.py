@@ -85,7 +85,7 @@ class nav_cloning_node:
             self.collision_list[1].pop(0)
             
             if distance < 0.1:
-                rospy.logwarn("Collision detected! Quit the program")
+                rospy.logwarn('model_' + str(self.model_num) + 'Collision detected! Quit the program')
                 self.is_finished = True
                 self.is_success = False
             
@@ -119,7 +119,7 @@ class nav_cloning_node:
             os.system('killall roslaunch')
             sys.exit()
 
-        # 走行時の視覚画像を表示
+        # 走行時の視覚画像を表示 CPU使用率削減のためコメントアウト
         # cv2.imshow("Original Image", self.cv_image)
         # cv2.waitKey(1)
 
@@ -132,7 +132,7 @@ class nav_cloning_node:
         # ロボットの移動指令を作成
         self.vel.linear.x = 0.2  # 直進速度は固定0.2
         self.vel.angular.z = target_action  # モデルから出力された角速度を使用
-        print(self.vel.angular.z)
+        print(f"model: {self.model_num}, angular: {self.vel.angular.z}")
 
         # パブリッシュ
         self.nav_pub.publish(self.vel)

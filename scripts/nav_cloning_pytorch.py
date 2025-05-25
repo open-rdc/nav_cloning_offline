@@ -32,7 +32,9 @@ class Net(nn.Module):
         self.conv3 = nn.Conv2d(64,64, kernel_size=3, stride=1)
         self.fc4 = nn.Linear(960, 512)
         self.fc5 = nn.Linear(512,n_out)
-        self.relu = nn.ReLU(inplace=True)
+        #試験的に変更
+        # self.relu = nn.ReLU(inplace=True)
+        self.relu = nn.LeakyReLU(0.01, inplace=True)
     #<Weight set>
         torch.nn.init.kaiming_normal_(self.conv1.weight)
         torch.nn.init.kaiming_normal_(self.conv2.weight)
@@ -147,9 +149,6 @@ class deep_learning:
         x_test_ten = x_test_ten.permute(0, 3, 1, 2)
 
         action_value_test = self.net(x_test_ten)
-        
-        # 出力を -0.25～0.25 に制限↓
-        #action_value_test = torch.tanh(action_value_test) * 0.25
         
         return action_value_test.item()
 
