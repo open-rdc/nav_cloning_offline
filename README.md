@@ -23,8 +23,6 @@
 
   ![collect\_data\_resize](https://github.com/YukiTakahashi4690/nav_cloning/assets/72371474/d3e43a62-31b8-4a51-b581-4c9d201a0ebb)
 
----
-
 ### 走行によるデータ収集
 
 * **目的**：3カメラまたは9カメラを使って走行中にデータ取得
@@ -45,8 +43,6 @@
 * `self.pro`：使用するデータフォルダ名
 * `self.data`：データ数（例：616）
 
----
-
 ### 配置データでの学習
 
 ```bash
@@ -54,16 +50,13 @@ roscd nav_cloning/sh
 ./learning.sh
 ```
 
----
-
 ### 走行データ（3cam or 9cam）での学習
 
 ```bash
 roscd nav_cloning/sh
 ./learning_run_3cam.sh
 ```
-
-> ※ 9cam版はスクリプト名を変更して使用してください。
+※ 9cam版はスクリプト名を変更して使用してください。
 
 ---
 
