@@ -21,15 +21,15 @@ class CourseFollowingLearningNode:
         self.save_path = self.path + f"model/{self.pro}/model{self.model_num}.pt"
         self.ang_path = self.path + f"ang/{self.pro}"
         self.img_path = self.path + f"img/{self.pro}"
-        self.loss_path =  self.path + f"loss/{self.pro}/model{self.model_num}.csv"
+        self.loss_path =  self.path + f"loss/{self.pro}/{self.pro}.csv"
 
         self.data = 645  # 使用するデータ数
         self.BATCH_SIZE = 16 # バッチサイズを指定
-        self.EPOCHS = 190 # エポック数を指定
+        self.EPOCHS = 400 # エポック数を指定
         
         os.makedirs(os.path.dirname(self.save_path), exist_ok=True)
         os.makedirs(self.path + f"/loss/{self.pro}/", exist_ok=True)
-
+    
     def load_images(self, index):
         shifts = {
             (1, 'center'):  0.022552916,
@@ -68,6 +68,38 @@ class CourseFollowingLearningNode:
                 angles.append(float(tar_ang))
         return angles
 
+    def save_loss(self, loss_log):
+        model_index = int(self.model_num) + 1  # 0列目はEpoch番号にするため+1
+        epochs = len(loss_log)
+
+        # 既存のloss.csvを読み込み（または初期化）
+        if os.path.exists(self.loss_path):
+            with open(self.loss_path, 'r') as fr:
+                lines = list(csv.reader(fr))
+        else:
+            lines = []
+
+        # loss_log からloss値だけを取り出す
+        loss_values = [row[0] for row in loss_log]
+
+        # 行数（エポック数）分用意（不足分は空行として補完）
+        while len(lines) < epochs:
+            lines.append([""] * (model_index + 1))  # 空列も補完
+
+        # 各行（エポック）にloss値を記入
+        for i in range(epochs):
+            # 必要に応じて列数を拡張
+            while len(lines[i]) <= model_index:
+                lines[i].append("")
+
+            lines[i][0] = str(i)  # 0列目にエポック番号
+            lines[i][model_index] = loss_values[i]  # 該当モデルの列に上書き
+
+        # 書き込み（上書きモード）
+        with open(self.loss_path, 'w', newline='') as fw:
+            writer = csv.writer(fw)
+            writer.writerows(lines)
+
     def learn(self):
         ang_list = self.load_angles()
 
@@ -97,9 +129,7 @@ class CourseFollowingLearningNode:
             loss_log.append([str(loss)])
 
         # lossの保存
-        with open(self.loss_path, 'a') as fw:
-            writer = csv.writer(fw, lineterminator='\n')
-            writer.writerows(loss_log)
+        self.save_loss(loss_log)
 
         # モデルの保存
         self.dl.save(self.save_path)

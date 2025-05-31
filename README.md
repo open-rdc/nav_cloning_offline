@@ -5,7 +5,7 @@
 ![collect_data_resize](https://github.com/YukiTakahashi4690/nav_cloning/assets/72371474/d3e43a62-31b8-4a51-b581-4c9d201a0ebb)  
     - このように目標経路に対してロボットを配置する
     - データ収集後はangフォルダとimgフォルダ内にそれぞれ角速度と画像が保存される 
-    - 現在の命名規則(img)例：lane1_center_1.jpg
+    - 現在の命名規則(img)：f"lane{lane}_{img_type}_{self.save_img_no}.jpg"
 ```
 roslaunch nav_cloning nav_cloning_sim.launch script:=set_collect.py use_waypoint_nav:=false use_cmd_vel:=false
 ```
@@ -31,7 +31,7 @@ roslaunch nav_cloning nav_cloning_sim.launch script:=run_collect_3cam.py use_way
     roscd nav_cloning/sh
     ./model_test
     ```
-- 特定の学習したモデルの出力のみを確認したい場合
+- 特定の学習したモデル番号の出力のみを確認したい場合
     ```
     roslaunch nav_cloning nav_cloning_sim.launch script:="model_test.py" use_waypoint_nav:=true use_cmd_vel:=false model_num:=1
     ```

@@ -90,6 +90,29 @@ class nav_cloning_node:
                 self.is_success = False
             
         return
+    
+    def write_score(self):
+        # 書き込みたい内容
+        self.line = ['model_' + str(self.model_num), str(self.is_success), str(self.step_counter), str(self.gazebo_pos_x), str(self.gazebo_pos_y)]
+
+        # CSV全体を読み込む（存在しない場合は空のリスト）
+        if os.path.exists(self.score):
+            with open(self.score, 'r') as f:
+                lines = list(csv.reader(f))
+        else:
+            lines = []
+
+        # 必要なら空行を追加しておく
+        while len(lines) <= int(self.model_num):
+            lines.append([''] * len(self.line))  # 空の行（列数は合わせる）
+
+        # 対象の行を更新
+        lines[int(self.model_num)] = self.line
+
+        # 全体を上書き
+        with open(self.score, 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerows(lines)
 
     def loop(self):
         # 画像サイズが正しいか確認
@@ -111,14 +134,10 @@ class nav_cloning_node:
 
         #終了判定
         if self.is_finished == True:
-            self.line = ['model_'+str(self.model_num), str(self.is_success), str(self.step_counter), str(self.gazebo_pos_x), str(self.gazebo_pos_y)]
-            with open(self.score, 'a') as f:
-                    writer = csv.writer(f, lineterminator='\n')
-                    writer.writerow(self.line)
-
+            self.write_score()
             os.system('killall roslaunch')
             sys.exit()
-
+        
         # 走行時の視覚画像を表示 CPU使用率削減のためコメントアウト
         # cv2.imshow("Original Image", self.cv_image)
         # cv2.waitKey(1)
