@@ -64,8 +64,8 @@ class GoalAngleSimulator:
         
         self.image_save_path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/img/'  + self.start_time
         self.ang_save_path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/ang/'  + self.start_time
-        os.makedirs(self.image_save_path)
-        os.makedirs(self.ang_save_path)
+        os.makedirs(self.image_save_path, exist_ok=True)
+        os.makedirs(self.ang_save_path, exist_ok=True)
         
         # 角速度を保存するCSVファイルの準備
         self.csv_file = open(self.ang_save_path + '/ang.csv', 'w')
