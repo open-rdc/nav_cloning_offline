@@ -16,7 +16,7 @@
 - **実行コマンド**：
   ```bash
   roslaunch nav_cloning nav_cloning_sim.launch script:=set_collect.py use_waypoint_nav:=false use_cmd_vel:=false
-````
+  ```
 
 * **備考**：
   ロボットを手動で下図のように配置し、静止状態での画像・角速度データを収集します。
@@ -40,7 +40,7 @@
 
 ### 学習前の準備
 
-学習用スクリプト内で以下の変数を**適切に設定**してください：
+学習用スクリプト内で以下の変数を適切に設定してください：
 
 * `self.pro`：使用するデータフォルダ名
 * `self.data`：データ数（例：616）
@@ -92,13 +92,6 @@ roslaunch nav_cloning nav_cloning_sim.launch script:=model_test.py use_waypoint_
 roslaunch nav_cloning nav_cloning_sim.launch script:=model_test.py use_waypoint_nav:=true use_cmd_vel:=false model_num:=1
 ```
 ※ 上記コマンドにより、経路から逸脱した際の復帰挙動も確認可能
-
----
-
-## その他
-
-* **画像命名規則**：`lane{lane}_{img_type}_{save_img_no}.jpg`
-* **使用カメラタイプ**：center, left, right など
 
 
 ## install
