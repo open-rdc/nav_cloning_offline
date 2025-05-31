@@ -31,6 +31,7 @@
   ```bash
   roslaunch nav_cloning nav_cloning_sim.launch script:=run_collect_3cam.py use_waypoint_nav:=true
   ```
+  
 
 ---
 
@@ -82,7 +83,7 @@ roslaunch nav_cloning nav_cloning_sim.launch script:=model_test.py use_waypoint_
 ### モデルの経路復帰性能を評価
 
 ```bash
-roslaunch nav_cloning nav_cloning_sim.launch script:=model_test.py use_waypoint_nav:=true use_cmd_vel:=false model_num:=1
+roslaunch nav_cloning nav_cloning_sim.launch script:=path_recovery_evaluator.py use_waypoint_nav:=false model_num:=1
 ```
 ※ 上記コマンドにより、経路から逸脱した際の復帰挙動も確認可能
 
