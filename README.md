@@ -31,8 +31,8 @@
   ```bash
   roslaunch nav_cloning nav_cloning_sim.launch script:=run_collect_3cam.py use_waypoint_nav:=true
   ```
+  ※ 9cam版はスクリプト名を変更して使用してください。
   
-
 ---
 
 ## 2. オフライン学習
@@ -57,7 +57,6 @@ roscd nav_cloning/sh
 roscd nav_cloning/sh
 ./learning_run_3cam.sh
 ```
-※ 9cam版はスクリプト名を変更して使用してください。
 
 ---
 
@@ -83,7 +82,8 @@ roslaunch nav_cloning nav_cloning_sim.launch script:=model_test.py use_waypoint_
 ### モデルの経路復帰性能を評価
 
 ```bash
-roslaunch nav_cloning nav_cloning_sim.launch script:=path_recovery_evaluator.py use_waypoint_nav:=false model_num:=1
+roscd nav_cloning/sh
+./path_recovery_evaluator.sh
 ```
 ※ 上記コマンドにより、経路から逸脱した際の復帰挙動も確認可能
 
