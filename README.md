@@ -80,7 +80,12 @@ roslaunch nav_cloning nav_cloning_sim.launch script:=model_test.py use_waypoint_
 ---
 
 ### モデルの経路復帰性能を評価
+経路を外すためのpath.csvがない場合、以下で作成
+```bash
+roslaunch nav_cloning nav_cloning_sim.launch script:=path_collector.py
+```
 
+経路復帰性能を評価
 ```bash
 roscd nav_cloning/sh
 ./path_recovery_evaluator.sh

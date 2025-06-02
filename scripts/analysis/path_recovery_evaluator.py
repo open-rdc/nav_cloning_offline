@@ -42,7 +42,7 @@ class PathRecoveryEvaluator:
         self.nav_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
         self.image_sub = rospy.Subscriber("/camera/lane1/center/rgb/image_raw", Image, self.callback)
 
-        csv_path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/path/00_02_fix.csv'
+        csv_path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/path/path_for_recovery_evaluator.csv'
         with open(csv_path, 'r') as f:
             self.pos_list = [line.strip().split(',') for line in f]
 
