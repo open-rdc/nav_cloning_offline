@@ -11,6 +11,9 @@ import time
 import numpy as np
 import math
 import roslib
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '../pytorch'))
+from nav_cloning_pytorch import *
 
 class CourceFollowingLearningNode:
     def __init__(self):

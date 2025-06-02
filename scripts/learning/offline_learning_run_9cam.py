@@ -8,7 +8,10 @@ import roslib
 import random
 import numpy as np
 import torch
-from nav_cloning_pytorch import deep_learning
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '../pytorch'))
+from nav_cloning_pytorch import *
 
 class CourseFollowingLearningNode:
     def __init__(self):

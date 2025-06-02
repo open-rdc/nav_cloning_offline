@@ -1,106 +1,105 @@
 #!/usr/bin/env python3
 from __future__ import print_function
-import roslib
-roslib.load_manifest('nav_cloning')
 import rospy
 import cv2
-from geometry_msgs.msg import PoseWithCovarianceStamped,Twist
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
-from geometry_msgs.msg import Twist
-from std_srvs.srv import Trigger
-from geometry_msgs.msg import PoseWithCovarianceStamped
-from geometry_msgs.msg import PoseStamped
-from std_msgs.msg import Header
-
+from geometry_msgs.msg import Twist, PoseWithCovarianceStamped
 from gazebo_msgs.srv import SetModelState
 from gazebo_msgs.msg import ModelState
-
-import math
 import tf.transformations
-
-from std_srvs.srv import SetBool, SetBoolResponse
+import numpy as np
+import roslib
 import csv
-import os
-import time
 import sys
-import datetime
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '../pytorch'))
+from nav_cloning_pytorch import deep_learning
 
 
-class GoalAngleSimulator:
+class PathRecoveryEvaluator:
     def __init__(self):
-        rospy.init_node('goal_angle_simulator', anonymous=True)
+        rospy.init_node('path_recovery_evaluator', anonymous=True)
+
+        self.cv_image = np.zeros((520, 694, 3), np.uint8)
+        self.bridge = CvBridge()
+        self.vel = Twist()
+
+        self.action_num = 1
+        self.pro = rospy.get_param("/nav_cloning_node/model_dir", "20250517_12:49:45")
+        self.model_num = rospy.get_param("/nav_cloning_node/model_num", "1")
+        self.initial_pose_x = -10.71378
+        self.initial_pose_y = -17.17456
+
+        self.dl = deep_learning(n_action=self.action_num)
+        load_path = roslib.packages.get_pkg_dir('nav_cloning') + f'/data/model/{self.pro}/model{self.model_num}.pt'
+        self.dl.load(load_path)
+        rospy.loginfo(f"Loaded model from: {load_path}")
 
         rospy.wait_for_service('/gazebo/set_model_state')
         self.set_state_srv = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
-
         self.amcl_pose_pub = rospy.Publisher('/initialpose', PoseWithCovarianceStamped, queue_size=1)
         self.nav_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
-        
         self.image_sub = rospy.Subscriber("/camera/lane1/center/rgb/image_raw", Image, self.callback)
-        
-        # CSV読み込み
+
         csv_path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/path/00_02_fix.csv'
         with open(csv_path, 'r') as f:
             self.pos_list = [line.strip().split(',') for line in f]
 
-        self.initial_pose_x = -10.71378
-        self.initial_pose_y = -17.17456
-        
-        self.image_save_no = 0  # 画像保存用の番号
-        
         self.run()
 
-    def callback(self):
+    def callback(self, data):
         try:
             self.cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
         except CvBridgeError as e:
-            print(e)
+            rospy.logerr(f"cv_bridge error: {e}")
 
     def move_robot_pose(self, x, y, theta):
-        # Gazebo
         state = ModelState()
         state.model_name = 'turtlebot3'
         state.pose.position.x = x
         state.pose.position.y = y
         quat = tf.transformations.quaternion_from_euler(0, 0, theta)
-        state.pose.orientation.x = quat[0]
-        state.pose.orientation.y = quat[1]
-        state.pose.orientation.z = quat[2]
-        state.pose.orientation.w = quat[3]
+        state.pose.orientation.x, state.pose.orientation.y, state.pose.orientation.z, state.pose.orientation.w = quat
 
         try:
             self.set_state_srv(state)
         except rospy.ServiceException as e:
-            rospy.logerr("SetModelState failed: %s" % e)
+            rospy.logerr(f"SetModelState failed: {e}")
 
-        # AMCL
         amcl = PoseWithCovarianceStamped()
         amcl.header.stamp = rospy.Time.now()
         amcl.header.frame_id = "map"
         amcl.pose.pose.position.x = x + self.initial_pose_x
         amcl.pose.pose.position.y = y + self.initial_pose_y
-        amcl.pose.pose.orientation.x = quat[0]
-        amcl.pose.pose.orientation.y = quat[1]
-        amcl.pose.pose.orientation.z = quat[2]
-        amcl.pose.pose.orientation.w = quat[3]
+        amcl.pose.pose.orientation.x, amcl.pose.pose.orientation.y, amcl.pose.pose.orientation.z, amcl.pose.pose.orientation.w = quat
         amcl.pose.covariance[-1] = 0.01
         self.amcl_pose_pub.publish(amcl)
 
-    
-    def run(self):
-        rate = rospy.Rate(0.5)  # 2秒ごと（AMCLが安定するように）
+    def inference_with_models(self):
+        img = cv2.resize(self.cv_image, (64, 48))
+        target_action = self.dl.act(img)
+        self.vel.linear.x = 0.2
+        self.vel.angular.z = target_action
+        self.nav_pub.publish(self.vel)
 
-        for i in range(len(self.pos_list)):
-            
-            # 移動位置
-            cur = self.pos_list[i]
+    def run(self):
+        rate = rospy.Rate(10)
+        for i, cur in enumerate(self.pos_list):
+            if self.cv_image.shape != (480, 640, 3):
+                rospy.loginfo("cv_image size is unexpected, skipping.")
+                continue
+
             x, y, theta = float(cur[1]), float(cur[2]), float(cur[3])
             self.move_robot_pose(x, y, theta)
 
-            rospy.sleep(1.0)  # AMCL反映のため
+            for _ in range(20):
+                self.inference_with_models()
+                rate.sleep()
 
-            rate.sleep()
 
 if __name__ == '__main__':
-    GoalAngleSimulator()
+    try:
+        PathRecoveryEvaluator()
+    except rospy.ROSInterruptException:
+        pass

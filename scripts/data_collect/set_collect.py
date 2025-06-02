@@ -7,7 +7,6 @@ import cv2
 from geometry_msgs.msg import PoseWithCovarianceStamped,Twist
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
-from nav_cloning_pytorch import *
 from geometry_msgs.msg import Twist
 from std_srvs.srv import Trigger
 from geometry_msgs.msg import PoseWithCovarianceStamped
@@ -26,6 +25,8 @@ import os
 import time
 import sys
 import datetime
+sys.path.append(os.path.join(os.path.dirname(__file__), '../pytorch'))
+from nav_cloning_pytorch import *
 
 
 class GoalAngleSimulator:
@@ -157,7 +158,7 @@ class GoalAngleSimulator:
 
                 # ゴール位置（中央レーンのみをゴールに）
                 for j in range(i + 0, len(self.pos_list)):
-                    if (j - i) >= self.goal_offset and (j % 3 == 0):  # 中央レーン
+                    if (j - i) >= self.goal_offset and (j % 3 == 1):  # 中央レーン
                         gx, gy = float(self.pos_list[j][1]), float(self.pos_list[j][2])
                         self.publish_goal(gx, gy)
                         break

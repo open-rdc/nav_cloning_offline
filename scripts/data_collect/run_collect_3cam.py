@@ -6,7 +6,6 @@ import rospy
 import cv2
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
-from nav_cloning_pytorch import *
 from skimage.transform import resize
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import PoseArray
@@ -22,6 +21,9 @@ import time
 import copy
 from nav_msgs.msg import Odometry
 import math
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '../pytorch'))
+from nav_cloning_pytorch import *
 
 class cource_following_learning_node:
     def __init__(self):
