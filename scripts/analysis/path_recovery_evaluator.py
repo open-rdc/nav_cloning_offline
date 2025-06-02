@@ -11,8 +11,10 @@ import tf.transformations
 import numpy as np
 import roslib
 import csv
-import sys
 import os
+import math
+from nav_msgs.msg import Odometry
+import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '../pytorch'))
 from nav_cloning_pytorch import deep_learning
 
@@ -41,6 +43,18 @@ class PathRecoveryEvaluator:
         self.amcl_pose_pub = rospy.Publisher('/initialpose', PoseWithCovarianceStamped, queue_size=1)
         self.nav_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
         self.image_sub = rospy.Subscriber("/camera/lane1/center/rgb/image_raw", Image, self.callback)
+        self.odom_sub = rospy.Subscriber("/tracker", Odometry, self.callback_odom)
+
+        self.cur_pose = None
+        self.cur_yaw = 0.0
+
+        # CSVファイル初期化
+        self.csv_path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/path/path_trajectory.csv'
+        with open(self.csv_path, 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(['no', 'x', 'y', 'yaw'])
+
+        self.path_no = 0
 
         csv_path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/path/path_for_recovery_evaluator.csv'
         with open(csv_path, 'r') as f:
@@ -53,6 +67,13 @@ class PathRecoveryEvaluator:
             self.cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
         except CvBridgeError as e:
             rospy.logerr(f"cv_bridge error: {e}")
+
+    def callback_odom(self, data):
+        self.cur_pose = data.pose.pose
+        orientation_q = self.cur_pose.orientation
+        quaternion = (orientation_q.x, orientation_q.y, orientation_q.z, orientation_q.w)
+        _, _, yaw = tf.transformations.euler_from_quaternion(quaternion)
+        self.cur_yaw = yaw
 
     def move_robot_pose(self, x, y, theta):
         state = ModelState()
@@ -82,6 +103,17 @@ class PathRecoveryEvaluator:
         self.vel.linear.x = 0.2
         self.vel.angular.z = target_action
         self.nav_pub.publish(self.vel)
+
+        # ロボットの座標だけ保存
+        if self.cur_pose is not None:
+            x = self.cur_pose.position.x
+            y = self.cur_pose.position.y
+            yaw = self.cur_yaw
+
+            with open(self.csv_path, 'a', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow([self.path_no, x, y, yaw])
+                self.path_no += 1
 
     def run(self):
         rate = rospy.Rate(10)
