@@ -52,8 +52,7 @@ class PathRecoveryEvaluator:
         self.csv_path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/path/path_trajectory.csv'
         with open(self.csv_path, 'w', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow(['no', 'x', 'y', 'yaw'])
-
+            
         self.path_no = 0
 
         csv_path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/path/path_for_recovery_evaluator.csv'
