@@ -10,35 +10,28 @@ rospack = rospkg.RosPack()
 pkg_dir = rospack.get_path('nav_cloning')
 
 # CSVファイル読み込み
-csv_file = pkg_dir + '/data/path/path_trajectory.csv'
-df = pd.read_csv(csv_file)
+csv_file = pkg_dir + '/data/analysis/path_trajectory.csv'
+df = pd.read_csv(csv_file, names=['x', 'y'], header=None, skip_blank_lines=False)
 
-x_list = df['x'].values
-y_list = df['y'].values
-
-# 20点ずつ分割
-segment_size = 20
 segments = []
-for i in range(0, len(x_list), segment_size):
-    segment = list(zip(x_list[i:i+segment_size], y_list[i:i+segment_size]))
-    # 先頭と末尾を除く
-    segment = segment[1:-1]
-    if segment:
-        segments.append(segment)
+current_segment = []
 
-# # 連続する重複点を削除
-def remove_duplicates(segment):
-    filtered = []
-    prev = None
-    for pt in segment:
-        if pt != prev:
-            filtered.append(pt)
-        prev = pt
-    return filtered
+for _, row in df.iterrows():
+    if pd.isna(row['x']) or pd.isna(row['y']):
+        if current_segment:
+            segments.append(current_segment)
+            current_segment = []
+    else:
+        current_segment.append((row['x'], row['y']))
 
-segments = [remove_duplicates(seg) for seg in segments]
+# 最後のセグメントも追加
+if current_segment:
+    segments.append(current_segment)
 
-# セグメント数表示
+# 必要に応じて、先頭・末尾の点を除外
+segments = [seg[1:-1] for seg in segments if len(seg) > 2]
+
+# セグメント数の確認
 print(f"セグメント数: {len(segments)}")
 
 # 描画
@@ -66,22 +59,28 @@ for segment in segments:
                 t[:, None]**3 * end
 
         # 曲線を描画
-        ax.plot(curve[:, 0], curve[:, 1], color='blue', lw=2, alpha=0.7)
+        ax.plot(curve[:, 0], curve[:, 1], color='black', lw=2, alpha=0.7)
 
         # 最後の部分に矢印
         arrow_start = curve[-2]
         arrow_end = curve[-1]
         ax.annotate('',
                     xy=arrow_end, xytext=arrow_start,
-                    arrowprops=dict(arrowstyle='-|>', color='blue', lw=2, alpha=0.7))
+                    arrowprops=dict(arrowstyle='-|>', color='black', lw=2, alpha=0.7))
 
 # 軸設定など
+# 全x, y座標を抽出して範囲設定に使う
+all_points = [pt for segment in segments for pt in segment]
+x_list = np.array([pt[0] for pt in all_points])
+y_list = np.array([pt[1] for pt in all_points])
+
 ax.set_xlim(x_list.min() - 0.1, x_list.max() + 0.1)
 ax.set_ylim(y_list.min() - 0.1, y_list.max() + 0.1)
 ax.set_aspect('equal')
 ax.grid(True)
 ax.set_xlabel('x')
 ax.set_ylabel('y')
-ax.set_title('20点ずつ分割されたセグメントごとの矢印表示')
+ax.set_title('Robot trajectory when off-path')
 
+plt.savefig(pkg_dir + '/data/analysis/output.png', dpi=500)  # 画像ファイルとして保存
 plt.show()

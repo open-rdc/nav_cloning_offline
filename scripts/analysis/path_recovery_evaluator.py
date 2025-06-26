@@ -49,7 +49,7 @@ class PathRecoveryEvaluator:
         self.cur_yaw = 0.0
 
         # CSVファイル初期化
-        self.csv_path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/path/path_trajectory.csv'
+        self.csv_path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/analysis/path_trajectory.csv'
         with open(self.csv_path, 'w', newline='') as f:
             writer = csv.writer(f)
             
@@ -128,7 +128,11 @@ class PathRecoveryEvaluator:
                 self.inference_with_models()
                 rate.sleep()
 
-
+            with open(self.csv_path, 'a', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(["", "", "", ""])
+                
+                
 if __name__ == '__main__':
     try:
         PathRecoveryEvaluator()
