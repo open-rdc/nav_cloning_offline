@@ -9,7 +9,6 @@ import csv
 from std_msgs.msg import Int8
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
-from nav_cloning_pytorch import deep_learning
 from skimage.transform import resize
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import Twist, PoseWithCovarianceStamped
@@ -17,6 +16,8 @@ from gazebo_msgs.msg import ModelStates
 import numpy as np
 import roslib
 import copy
+sys.path.append(os.path.join(os.path.dirname(__file__), 'pytorch'))
+from nav_cloning_pytorch import *
 
 class nav_cloning_node:
     def __init__(self):
