@@ -8,9 +8,9 @@ function ctrl_c() {
 
 trap ctrl_c SIGINT
 
-for i in $(seq 1 10)
+for i in $(seq 1 100)
 do
     echo "$i"
-    rosrun nav_cloning offline_learning_viewpoint_aug.py i
+    rosrun nav_cloning offline_learning_viewpoint_aug.py "$i"
     sleep 10
 done

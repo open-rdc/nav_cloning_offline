@@ -19,7 +19,7 @@
     local-name: turtlebot3_gazebo_plugin
     version: master
 - git:
-    uri: https://github.com/YukiTakahashi4690/nav_cloning.git
+    uri: https://github.com/KOYAMA-Yuya/nav_cloning_offline.git
     local-name: nav_cloning
     version: master
 - git:
@@ -27,7 +27,7 @@
     local-name: navigation
     version: noetic-devel
 - git:
-    uri: https://github.com/YukiTakahashi4690/waypoint_nav.git
+    uri: https://github.com/KOYAMA-Yuya/waypoint_nav.git
     local-name: waypoint_nav
     version: main
 - git:

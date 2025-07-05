@@ -11,6 +11,6 @@ trap ctrl_c SIGINT
 for i in $(seq 1 10)
 do
     echo "$i"
-    rosrun nav_cloning offline_learning_run_3cam.py 1
+    rosrun nav_cloning offline_learning_run_3cam.py "$i"
     sleep 10
 done

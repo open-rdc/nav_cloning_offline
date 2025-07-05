@@ -80,7 +80,7 @@ roslaunch nav_cloning nav_cloning_sim.launch script:=model_test.py use_waypoint_
 ---
 
 ### モデルの経路復帰性能を評価
-経路を外すためのpath.csvがない場合、以下で作成
+経路周辺に移動するためのpath.csvがない場合、以下で作成
 ```bash
 roslaunch nav_cloning nav_cloning_sim.launch script:=path_collector.py
 ```
@@ -107,7 +107,7 @@ catkin build
 * nav_cloningの用意
 ```
 cd ~/catkin_ws/src
-wget https://raw.githubusercontent.com/YukiTakahashi4690/nav_cloning/master/nav_cloning.install
+wget https://raw.githubusercontent.com/KOYAMA-Yuya/nav_cloning_offline/master/nav_cloning.install
 wstool init
 wstool merge nav_cloning.install
 wstool up

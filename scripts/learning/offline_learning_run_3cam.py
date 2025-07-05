@@ -87,7 +87,7 @@ class CourseFollowingLearningNode:
             start_time_epoch = time.time()
             loss = self.dl.trains(self.BATCH_SIZE)
             end_time_epoch = time.time()
-            print(f"Epoch {epoch + 1}, Epoch time: {end_time_epoch - start_time_epoch:.4f} seconds, Loss: {loss}")
+            print(f"Model {self.model_num}, Epoch {epoch + 1}, Epoch time: {end_time_epoch - start_time_epoch:.4f} seconds, Loss: {loss}")
             loss_log.append([str(loss)])
 
         # lossの保存
