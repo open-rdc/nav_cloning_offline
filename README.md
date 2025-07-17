@@ -69,15 +69,11 @@ roscd nav_cloning/sh
 ./model_test
 ```
 
----
-
 ### 特定のモデル出力を確認
 
 ```bash
 roslaunch nav_cloning nav_cloning_sim.launch script:=model_test.py use_waypoint_nav:=true use_cmd_vel:=false model_num:=1
 ```
-
----
 
 ### モデルの経路復帰性能を評価
 経路周辺に移動するためのpath.csvがない場合、以下で作成
@@ -92,6 +88,7 @@ roscd nav_cloning/sh
 ```
 ※ 上記コマンドにより、経路から逸脱した際の復帰挙動も確認可能
 
+---
 
 ## install
 * 環境 ubuntu20.04, ros noetic
