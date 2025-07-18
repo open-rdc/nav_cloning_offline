@@ -26,10 +26,10 @@ class cource_following_learning_node:
         self.bridge = CvBridge()
 
         # カメラデータ購読
-        self.image_sub = rospy.Subscriber("/camera/lane1/center/rgb/image_raw", Image, self.callback)
-        self.image_sub = rospy.Subscriber("/camera/lane2/center/rgb/image_raw", Image, self.callback_left_camera)
-        self.image_sub = rospy.Subscriber("/camera/lane3/center/rgb/image_raw", Image, self.callback_right_camera)
-        
+        self.center_sub = rospy.Subscriber("/camera/lane1/center/rgb/usb_cam/image_raw", Image, self.callback)
+        self.left_sub = rospy.Subscriber("/camera/lane2/center/rgb/usb_cam/image_raw", Image, self.callback_left_camera)
+        self.right_sub = rospy.Subscriber("/camera/lane3/center/rgb/usb_cam/image_raw", Image, self.callback_right_camera)
+ 
         self.vel_sub = rospy.Subscriber("/icart_mini/cmd_vel", Twist, self.callback_vel, queue_size=10)
         
         self.cv_image = np.zeros((520, 694, 3), np.uint8)
@@ -55,9 +55,11 @@ class cource_following_learning_node:
             self.resize_right_img = cv2.resize(self.cv_right_image, (64, 48), interpolation=cv2.INTER_AREA)
 
             # 保存
-            cv2.imwrite(self.path + "img/" + self.start_time + "/left" + str(self.save_img_no) + ".jpg", self.resize_left_img)
-            cv2.imwrite(self.path + "img/" + self.start_time + "/center" + str(self.save_img_no) + ".jpg", self.resize_img)
-            cv2.imwrite(self.path + "img/" + self.start_time + "/right" + str(self.save_img_no) + ".jpg", self.resize_right_img)
+            save_dir = self.path + "img/" + self.start_time + "/"
+            cv2.imwrite(save_dir + "lane1_center_" + str(self.save_img_no) + ".jpg", self.resize_img)
+            cv2.imwrite(save_dir + "lane2_center_" + str(self.save_img_no) + ".jpg", self.resize_left_img)
+            cv2.imwrite(save_dir + "lane3_center_" + str(self.save_img_no) + ".jpg", self.resize_right_img)
+
 
             print('Saved image number:', self.save_img_no)
         except:
@@ -93,11 +95,11 @@ class cource_following_learning_node:
 
     def loop(self):
         # 画像がまだ届いていない場合はスキップ
-        if self.cv_image.size != 694 * 520 * 3:
+        if self.cv_image.size != 320 * 240 * 3:
             return
-        if self.cv_left_image.size != 694 * 520 * 3:
+        if self.cv_left_image.size != 320 * 240 * 3:
             return
-        if self.cv_right_image.size != 694 * 520 * 3:
+        if self.cv_right_image.size != 320 * 240 * 3:
             return
 
         # 保存

@@ -17,7 +17,7 @@ class CourseFollowingLearningNode:
         self.dl = deep_learning(n_action=1)
         self.start_time = time.strftime("%Y%m%d_%H:%M:%S")
         self.model_num = str(sys.argv[1])
-        self.pro = "20250419_23:59:33"  # データセットの識別名
+        self.pro = "20250718_18:18:25"  # データセットの識別名
         self.path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/'
         self.save_path = self.path + f"model/{self.pro}/model{self.model_num}.pt"
         self.ang_path = self.path + f"ang/{self.pro}/"
