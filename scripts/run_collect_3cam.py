@@ -22,7 +22,7 @@ import copy
 from nav_msgs.msg import Odometry
 import math
 import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), '../pytorch'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'pytorch'))
 from nav_cloning_pytorch import *
 
 class cource_following_learning_node:

@@ -15,7 +15,7 @@ import time
 import numpy as np
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../pytorch'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'pytorch'))
 from nav_cloning_pytorch import *
 
 class cource_following_learning_node:
@@ -26,10 +26,10 @@ class cource_following_learning_node:
         self.bridge = CvBridge()
 
         # カメラデータ購読
-        self.image_sub_center = rospy.Subscriber("/camera_center/image_raw", Image, self.callback)
-        self.image_sub_left   = rospy.Subscriber("/camera_left/image_raw", Image, self.callback_left_camera)
-        self.image_sub_right  = rospy.Subscriber("/camera_right/image_raw", Image, self.callback_right_camera)
-
+        self.image_sub = rospy.Subscriber("/camera/lane1/center/rgb/image_raw", Image, self.callback)
+        self.image_sub = rospy.Subscriber("/camera/lane2/center/rgb/image_raw", Image, self.callback_left_camera)
+        self.image_sub = rospy.Subscriber("/camera/lane3/center/rgb/image_raw", Image, self.callback_right_camera)
+        
         self.vel_sub = rospy.Subscriber("/icart_mini/cmd_vel", Twist, self.callback_vel, queue_size=10)
         
         self.cv_image = np.zeros((520, 694, 3), np.uint8)

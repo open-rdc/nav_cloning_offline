@@ -25,7 +25,7 @@ import os
 import time
 import sys
 import datetime
-sys.path.append(os.path.join(os.path.dirname(__file__), '../pytorch'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'pytorch'))
 from nav_cloning_pytorch import *
 
 
