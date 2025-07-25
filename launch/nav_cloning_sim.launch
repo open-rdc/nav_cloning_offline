@@ -8,12 +8,12 @@
 
       <!-- 設定値 -->
       <arg name="num" default="1"/>
-      <arg name="world_name" default="willow_garage.world"/>
-      <arg name="map_file" default="willowgarage.yaml"/>
+      <arg name="world_name" default="Tsudanuma_2-3.world"/>
+      <arg name="map_file" default="Tsudanuma_2-3.yaml"/>
       <arg name="waypoints_file" default="willow_loop_waypoint_nav_shirasu.yaml"/>
       <arg name="rate" default="0.1" />
       <arg name="dist_err" default="0.8"/>
-
+      
       <!-- 初期位置の設定 -->
       <arg name="initial_pose_x" default="-10.78" />
       <arg name="initial_pose_y" default="-16.78" />
@@ -30,7 +30,7 @@
 
       <!-- Gazeboシミュレータを起動 -->
       <include file="$(find gazebo_ros)/launch/empty_world.launch">
-            <arg name="world_name" value="$(find nav_cloning)/world/willow_garage.world"/>
+            <arg name="world_name" value="$(find nav_cloning)/world/$(arg world_name)"/> 
             <arg name="paused" value="false"/>
             <arg name="use_sim_time" value="true"/>
             <arg name="gui" value="true"/>
