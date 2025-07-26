@@ -8,8 +8,8 @@
 
       <!-- 設定値 -->
       <arg name="num" default="1"/>
-      <arg name="world_name" default="Tsudanuma_2-3.world"/>
-      <arg name="map_file" default="Tsudanuma_2-3.yaml"/>
+      <arg name="world_name" default="tsudanuma2-3_v2.3.3.world"/>
+      <arg name="map_file" default="real_tsudanuma2-3_v2.yaml"/>
       <arg name="waypoints_file" default="willow_loop_waypoint_nav_shirasu.yaml"/>
       <arg name="rate" default="0.1" />
       <arg name="dist_err" default="0.8"/>
