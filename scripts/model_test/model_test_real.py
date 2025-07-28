@@ -16,7 +16,7 @@ from gazebo_msgs.msg import ModelStates
 import numpy as np
 import roslib
 import copy
-sys.path.append(os.path.join(os.path.dirname(__file__), 'pytorch'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../pytorch'))
 from nav_cloning_pytorch import *
 
 class nav_cloning_node:
