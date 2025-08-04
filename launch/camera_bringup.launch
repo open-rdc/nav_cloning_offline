@@ -2,7 +2,7 @@
 
   <group ns="camera/lane1/center/rgb">
     <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
-      <param name="video_device" value="/dev/video8" />
+      <param name="video_device" value="/dev/video4" />
       <param name="image_width" value="320" />
       <param name="image_height" value="240" />
       <param name="pixel_format" value="yuyv" />
@@ -12,7 +12,7 @@
     </node>
   </group>
 
-  <group ns="camera/lane2/center/rgb">
+  <!-- <group ns="camera/lane2/center/rgb">
     <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
       <param name="video_device" value="/dev/video0" />
       <param name="image_width" value="320" />
@@ -34,6 +34,6 @@
       <param name="io_method" value="mmap"/>
       <param name="framerate" value="10"/>
     </node>
-  </group>
+  </group> -->
 
 </launch>
