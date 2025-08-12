@@ -22,12 +22,11 @@ def on_press(key):
         twist.angular.z = 0.0
 
         if key.char == 'w':  # 前進
-            twist.angular.z = 0.0
-        
+            twist.linear.x = linear_speed
+            
         elif key.char == 's':  # 後退
             twist.linear.x = -linear_speed
-            twist.angular.z = 0.0
-        
+            
         elif key.char == 'a':  # 左旋回
             twist.angular.z = angular_speed
         
@@ -35,6 +34,7 @@ def on_press(key):
             twist.angular.z = -angular_speed
         
         elif key.char == 'q':  # 停止
+            twist.linear.x = 0.0
             twist.angular.z = 0.0
         
         # パブリッシュ

@@ -192,10 +192,10 @@
         </link>
       </model>
       <model name='tsudanuma2-3'>
-        <pose>-0.238656 -4.6591 0.1 1.57001 0.000553 0.025513</pose>
+        <pose>-0.238656 -4.6591 0 1.57079633 0 0</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>-0.238656 -4.6591 0.1 1.57001 0.000553 0.025513</pose>
+          <pose>-0.238656 -4.6591 0 1.57079633 0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -228,7 +228,7 @@
       </camera>
     </gui>
     <model name='tsudanuma2-3'>
-      <pose>1.11334 -0.75178 0 0 -0 0</pose>
+      <pose>-0.238656 -4.6591 0 1.57079633 0 0</pose>
       <static>1</static>
       <link name='link'>
         <inertial>
