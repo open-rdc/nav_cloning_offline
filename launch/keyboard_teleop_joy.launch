@@ -43,7 +43,7 @@
       args="-param robot_description -urdf -model turtlebot3 -x $(arg initial_pose_x) -y $(arg initial_pose_y) -z 0.0 -Y $(arg initial_pose_a)" />
 
   <!-- 手動操作 -->
-  <node pkg="nav_cloning" type="keyboard_teleop.py" name="keyboard_teleop" output="screen"/>
+  <node pkg="nav_cloning" type="keyboard_teleop_joy.py" name="keyboard_teleop" output="screen"/>
 
   <!-- データ収集（時間をずらして実行）デフォルトはnav_cloning_node.pyを使用 -->
   <!-- <node pkg="timed_roslaunch" type="timed_roslaunch.sh"
