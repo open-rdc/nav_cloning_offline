@@ -95,21 +95,19 @@ class cource_following_learning_node:
 
     def loop(self):
         # 画像がまだ届いていない場合はスキップ
-        if self.cv_image.size != 320 * 240 * 3:
-            return
-        if self.cv_left_image.size != 320 * 240 * 3:
-            return
-        if self.cv_right_image.size != 320 * 240 * 3:
-            return
+        # if self.cv_image.size != 320 * 240 * 3:
+        #     return
+        # if self.cv_left_image.size != 320 * 240 * 3:
+        #     return
+        # if self.cv_right_image.size != 320 * 240 * 3:
+        #     return
 
         # 保存
         self.capture_img()
         self.capture_ang()
         self.save_img_no += 1
 
-        # 学習終了条件（任意）
-        if self.episode == 4000:
-            self.learning = False
+
 
 if __name__ == '__main__':
     rg = cource_following_learning_node()

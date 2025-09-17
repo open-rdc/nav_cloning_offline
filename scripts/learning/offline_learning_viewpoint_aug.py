@@ -25,20 +25,20 @@ class CourseFollowingLearningNode:
 
         self.start_time = time.strftime("%Y%m%d_%H:%M:%S")
         self.model_num = str(sys.argv[1])
-        self.pro = "20250718_20:03:49"  # データセットの識別名
+        self.pro = "20250915_13:44:17"  # データセットの識別名
         self.path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/'
         self.save_path = self.path + f"model/{self.pro}/model{self.model_num}.pt"
         self.ang_path = self.path + f"ang/{self.pro}"
         self.img_path = self.path + f"img/{self.pro}"
         self.loss_path =  self.path + f"loss/{self.pro}/{self.pro}.csv"
 
-        self.data =  321 # 使用するデータ数
-        self.BATCH_SIZE = 8 # バッチサイズを指定
-        self.EPOCHS = 1000 # エポック数を指定
+        self.data = 190 # 使用するデータ数
+        self.BATCH_SIZE = 16 # バッチサイズを指定
+        self.EPOCHS = 150 # エポック数を指定
         
         os.makedirs(os.path.dirname(self.save_path), exist_ok=True)
         os.makedirs(self.path + f"/loss/{self.pro}/", exist_ok=True)
-    
+
     def load_images(self, index):
         # 各レーン・視点ごとの角速度補正値
         shifts = {

@@ -28,16 +28,17 @@ class nav_cloning_node:
         
         self.robot_name = "turtlebot3"  # 例（実際のモデル名に合わせて）
         self.image_sub = rospy.Subscriber("/camera/lane1/center/rgb/image_raw", Image, self.callback)
+        
         self.vel_sub = rospy.Subscriber("/nav_vel", Twist, self.callback_vel)
         self.gazebo_pos_sub = rospy.Subscriber("/gazebo/model_states", ModelStates, self.callback_gazebo_pos, queue_size = 2)
         self.waypoint_num = rospy.Subscriber("/count_waypoint", Int8, self.callback_waypoint)
-
+        
         self.action_pub = rospy.Publisher("action", Int8, queue_size=1)
         self.nav_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
         
         self.cv_image = np.zeros((520, 694, 3), np.uint8)
         self.vel = Twist()
-        self.pro = "20250718_20:03:49"  # モデルファイル
+        self.pro = "20250915_13:44:17"  # モデルファイル
         self.model_num = rospy.get_param("/nav_cloning_node/model_num", "1")
         self.load_path = roslib.packages.get_pkg_dir('nav_cloning') + f'/data/model/{self.pro}/model{self.model_num}.pt'
         self.score = roslib.packages.get_pkg_dir('nav_cloning') + f'/data/score/{self.pro}.csv'
@@ -73,6 +74,7 @@ class nav_cloning_node:
     def loop(self):
         # 画像サイズが正しいか確認
         if self.cv_image.shape != (480, 640, 3):
+            print("image size false")
             return
 
         #ステップ更新
