@@ -29,9 +29,10 @@
 * **実行コマンド（例：3カメラ）**：
 
   ```bash
-  roslaunch nav_cloning nav_cloning_sim.launch script:=run_collect_3cam.py use_waypoint_nav:=true
+  roscd nav_cloning/sh/collect
+  ./collect_run_3cam_sim
   ```
-  ※ 9cam版はスクリプト名を変更して使用してください。また、任意の走行終了ポイントでプログラムを停止してください
+  ※ 9cam版はsh名を変更して使用してください。また、任意の走行終了ポイントでプログラムを停止してください
 
 ### コントローラ走行によるデータ収集
 
@@ -39,7 +40,8 @@
 * **実行コマンド（例：3カメラ）**：
 
   ```bash
-  roslaunch nav_cloning nav_cloning_sim.launch script:=run_collect_3cam_sim_contllor.py use_waypoint_nav:=false
+  roscd nav_cloning/sh/collect
+  ./collect_run_3cam_sim_contllor.sh
   ```
   別のターミナルで
   ```bash

@@ -15,7 +15,7 @@ import time
 import numpy as np
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), 'pytorch'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../pytorch'))
 from nav_cloning_pytorch import *
 
 class cource_following_learning_node:
@@ -26,13 +26,11 @@ class cource_following_learning_node:
         self.bridge = CvBridge()
 
         # カメラデータ購読
-        self.center_sub = rospy.Subscriber("/camera/lane1/center/rgb/image_raw", Image, self.callback)
-        self.left_sub = rospy.Subscriber("/camera/lane2/center/rgb/image_raw", Image, self.callback_left_camera)
-        self.right_sub = rospy.Subscriber("/camera/lane3/center/rgb/image_raw", Image, self.callback_right_camera)
+        self.center_sub = rospy.Subscriber("/camera/lane1/center/rgb/usb_cam/image_raw", Image, self.callback)
+        self.left_sub = rospy.Subscriber("/camera/lane2/center/rgb/usb_cam/image_raw", Image, self.callback_left_camera)
+        self.right_sub = rospy.Subscriber("/camera/lane3/center/rgb/usb_cam/image_raw", Image, self.callback_right_camera)
  
         self.vel_sub = rospy.Subscriber("/icart_mini/cmd_vel", Twist, self.callback_vel, queue_size=10)
-        self.nav_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
-
         
         self.cv_image = np.zeros((520, 694, 3), np.uint8)
         self.cv_left_image = np.zeros((520, 694, 3), np.uint8)
@@ -95,17 +93,13 @@ class cource_following_learning_node:
         self.vel = data
         self.action = self.vel.angular.z
 
-        # パブリッシュ
-        self.nav_pub.publish(self.vel)
-
-
     def loop(self):
         # 画像がまだ届いていない場合はスキップ
-        # if self.cv_image.size != 694 * 520 * 3:
+        # if self.cv_image.size != 320 * 240 * 3:
         #     return
-        # if self.cv_left_image.size != 694 * 520 * 3:
+        # if self.cv_left_image.size != 320 * 240 * 3:
         #     return
-        # if self.cv_right_image.size != 694 * 520 * 3:
+        # if self.cv_right_image.size != 320 * 240 * 3:
         #     return
 
         # 保存
@@ -113,9 +107,11 @@ class cource_following_learning_node:
         self.capture_ang()
         self.save_img_no += 1
 
+
+
 if __name__ == '__main__':
     rg = cource_following_learning_node()
-    DURATION = 1.0 #0.5  # 保存間隔（秒）
+    DURATION = 0.5  # 保存間隔（秒）
     r = rospy.Rate(1 / DURATION)
     while not rospy.is_shutdown():
         rg.loop()
