@@ -15,7 +15,8 @@
   - `ang/`：角速度
 - **実行コマンド**：
   ```bash
-  roslaunch nav_cloning nav_cloning_sim.launch script:=set_collect.py use_waypoint_nav:=false use_cmd_vel:=false
+  roscd nav_cloning/sh/collect
+  ./collect_set_1cam_sim.sh
   ```
 
 * **備考**：
@@ -30,7 +31,7 @@
 
   ```bash
   roscd nav_cloning/sh/collect
-  ./collect_run_3cam_sim
+  ./collect_run_3cam_sim.sh
   ```
   ※ 9cam版はsh名を変更して使用してください。また、任意の走行終了ポイントでプログラムを停止してください
 
