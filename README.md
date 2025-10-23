@@ -47,14 +47,14 @@
 ### 配置データでの学習
 
 ```bash
-roscd nav_cloning/sh
+roscd nav_cloning/sh/learning
 ./learning.sh
 ```
 
 ### 走行データ（3cam or 9cam）での学習
 
 ```bash
-roscd nav_cloning/sh/lerning
+roscd nav_cloning/sh/learning
 ./learning_run_3cam.sh
 ```
 
@@ -83,7 +83,7 @@ roslaunch nav_cloning nav_cloning_sim.launch script:=path_collector.py
 
 経路復帰性能を評価
 ```bash
-roscd nav_cloning/sh
+roscd nav_cloning/sh/analysis
 ./path_recovery_evaluator.sh
 ```
 ※ 上記コマンドにより、経路から逸脱した際の復帰挙動も確認可能
