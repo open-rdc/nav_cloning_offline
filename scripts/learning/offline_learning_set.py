@@ -18,7 +18,7 @@ class CourseFollowingLearningNode:
         self.dl = deep_learning(n_action=1)
         self.start_time = time.strftime("%Y%m%d_%H:%M:%S")
         self.model_num = str(sys.argv[1])
-        self.pro = "20250506_00:14:39"  # データセットの識別名
+        self.pro = "20251007_10:46:35"  # データセットの識別名
 
         self.path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/'
         self.save_path = self.path + f"model/{self.pro}/model{self.model_num}.pt"
@@ -26,7 +26,7 @@ class CourseFollowingLearningNode:
         self.img_path = self.path + f"img/{self.pro}/center"
         self.loss_path =  self.path + f"loss/{self.pro}/model{self.model_num}.csv"
         
-        self.data = 1695  # 使用するデータ数
+        self.data = 1096  # 使用するデータ数
         self.BATCH_SIZE = 16 # バッチサイズを指定
         self.EPOCHS = 300 # エポック数を指定
         

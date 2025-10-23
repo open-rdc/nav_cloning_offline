@@ -15,8 +15,8 @@
       <arg name="dist_err" default="0.8"/>
       
       <!-- 初期位置の設定 -->
-      <arg name="initial_pose_x" default="-10.78" />
-      <arg name="initial_pose_y" default="-16.78" />
+      <arg name="initial_pose_x" default="-10.0" />
+      <arg name="initial_pose_y" default="10.0" />
       <arg name="initial_pose_a" default="0.0" />
 
       <!-- ウェイポイントナビゲーションを使用するか -->
@@ -40,8 +40,15 @@
 
       <!-- ロボットのスポーン -->
       <param name="robot_description" command="$(find xacro)/xacro $(find turtlebot3_description)/urdf/turtlebot3_waffle_pi.urdf.xacro" />
-      <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model turtlebot3" 
+
+      <!--
+      <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model turtlebot3 -x $(arg initial_pose_x) -y $(arg initial_pose_y) -Y $(arg initial_pose_a)" 
       launch-prefix="bash -c 'sleep 7; exec /opt/ros/noetic/lib/gazebo_ros/spawn_model -param robot_description -urdf -model turtlebot3'"/>
+      -->
+
+      <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
+      args="-param robot_description -urdf -model turtlebot3 -x 5.00 -y -3.00 -Y 1.57"
+      launch-prefix="bash -c 'sleep 7; exec /opt/ros/noetic/lib/gazebo_ros/spawn_model -param robot_description -urdf -model turtlebot3 -x 5.00 -y -3.00 -Y 1.57'"/>
 
       <!--スクリプト実行 -->
       <node pkg="timed_roslaunch" type="timed_roslaunch.sh"

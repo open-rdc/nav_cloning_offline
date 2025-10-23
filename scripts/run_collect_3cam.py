@@ -78,9 +78,10 @@ class cource_following_learning_node:
             Flag = True
             try:
                 #カメラ画像を保存
-                cv2.imwrite(self.path + "img/" + self.start_time + "/left" + str(self.save_img_no) + ".jpg", self.resize_left_img)
-                cv2.imwrite(self.path + "img/" + self.start_time + "/center" + str(self.save_img_no) + ".jpg", self.resize_img)
-                cv2.imwrite(self.path + "img/" + self.start_time + "/right" + str(self.save_img_no) + ".jpg", self.resize_right_img)
+                save_dir = self.path + "img/" + self.start_time + "/"
+                cv2.imwrite(save_dir + "lane1_center_" + str(self.save_img_no) + ".jpg", self.resize_img)
+                cv2.imwrite(save_dir + "lane2_center_" + str(self.save_img_no) + ".jpg", self.resize_left_img)
+                cv2.imwrite(save_dir + "lane3_center_" + str(self.save_img_no) + ".jpg", self.resize_right_img)
                 
             except:
                 print('Not save image')

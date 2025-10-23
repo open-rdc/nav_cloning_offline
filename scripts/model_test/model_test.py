@@ -27,7 +27,9 @@ class nav_cloning_node:
         self.bridge = CvBridge()
         
         self.robot_name = "turtlebot3"  # 例（実際のモデル名に合わせて）
-        self.image_sub = rospy.Subscriber("/camera/lane1/center/rgb/image_raw", Image, self.callback)
+
+        self.image_sub = rospy.Subscriber("/camera/lane1/center/rgb/image_raw", Image, self.callback)	
+       # self.image_sub = rospy.Subscriber("/camera/rgb/image_raw", Image, self.callback)
         self.vel_sub = rospy.Subscriber("/nav_vel", Twist, self.callback_vel)
         self.gazebo_pos_sub = rospy.Subscriber("/gazebo/model_states", ModelStates, self.callback_gazebo_pos, queue_size = 2)
         self.waypoint_num = rospy.Subscriber("/count_waypoint", Int8, self.callback_waypoint)
@@ -37,7 +39,7 @@ class nav_cloning_node:
         
         self.cv_image = np.zeros((520, 694, 3), np.uint8)
         self.vel = Twist()
-        self.pro = "20250718_20:03:49"  # モデルファイル
+        self.pro = "20251015_15:45:01"  # モデルファイル
         self.model_num = rospy.get_param("/nav_cloning_node/model_num", "1")
         self.load_path = roslib.packages.get_pkg_dir('nav_cloning') + f'/data/model/{self.pro}/model{self.model_num}.pt'
         self.score = roslib.packages.get_pkg_dir('nav_cloning') + f'/data/score/{self.pro}.csv'

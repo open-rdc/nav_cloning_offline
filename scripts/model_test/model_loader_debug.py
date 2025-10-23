@@ -37,7 +37,7 @@ class nav_cloning_node:
         
         self.cv_image = np.zeros((520, 694, 3), np.uint8)
         self.vel = Twist()
-        self.pro = "20250718_20:03:49"  # モデルファイル
+        self.pro = "20251009_14:28:50"  # モデルファイル
         self.model_num = rospy.get_param("/nav_cloning_node/model_num", "1")
         self.load_path = roslib.packages.get_pkg_dir('nav_cloning') + f'/data/model/{self.pro}/model{self.model_num}.pt'
         self.score = roslib.packages.get_pkg_dir('nav_cloning') + f'/data/score/{self.pro}.csv'
