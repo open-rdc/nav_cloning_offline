@@ -31,8 +31,7 @@
   ```bash
   roslaunch nav_cloning nav_cloning_sim.launch script:=run_collect_3cam.py use_waypoint_nav:=true
   ```
-  ※ 9cam版はスクリプト名を変更して使用してください。
-  ※任意の走行終了ポイントでプログラムを停止してください
+  ※ 9cam版はスクリプト名を変更して使用してください。また、任意の走行終了ポイントでプログラムを停止してください
 
 ### コントローラ走行によるデータ収集
 
@@ -42,7 +41,7 @@
   ```bash
   roslaunch nav_cloning nav_cloning_sim.launch script:=run_collect_3cam_sim_contllor.py use_waypoint_nav:=false
   ```
-※任意の走行終了ポイントでプログラムを停止してください
+  ※任意の走行終了ポイントでプログラムを停止してください
 ---
 
 ## 2. オフライン学習
@@ -70,11 +69,12 @@ roscd nav_cloning/sh/learning
 
 ### 3cam走行データを画像拡張し学習
 
-```bash
-roscd nav_cloning/sh/learning
-./learning_viewpoint_aug.sh
-```
-※9camと3camの画像拡張については安定した経路追従を確認しています
+  ```bash
+  roscd nav_cloning/sh/learning
+  ./learning_viewpoint_aug.sh
+  ```
+  ※9camと3camの画像拡張については安定した経路追従を確認しています
+
 ---
 
 ## 3. モデルテスト・経路追従評価
