@@ -41,6 +41,10 @@
   ```bash
   roslaunch nav_cloning nav_cloning_sim.launch script:=run_collect_3cam_sim_contllor.py use_waypoint_nav:=false
   ```
+  別のターミナルで
+  ```bash
+  roslaunch icart_mini_driver teleop_joy.launch
+  ```
   ※任意の走行終了ポイントでプログラムを停止してください
 ---
 
