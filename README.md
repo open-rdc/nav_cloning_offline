@@ -19,7 +19,7 @@
   ```
 
 * **備考**：
-  ロボットを手動で下図のように配置し、静止状態での画像・角速度データを収集します。
+  ロボットを自動で下図のように配置し、静止状態での画像・角速度データを収集します。
 
   ![collect\_data\_resize](https://github.com/YukiTakahashi4690/nav_cloning/assets/72371474/d3e43a62-31b8-4a51-b581-4c9d201a0ebb)
 
@@ -54,7 +54,7 @@ roscd nav_cloning/sh
 ### 走行データ（3cam or 9cam）での学習
 
 ```bash
-roscd nav_cloning/sh
+roscd nav_cloning/sh/lerning
 ./learning_run_3cam.sh
 ```
 
@@ -65,7 +65,7 @@ roscd nav_cloning/sh
 ### 学習済みモデルでの経路追従テスト
 
 ```bash
-roscd nav_cloning/sh
+roscd nav_cloning/sh/model_test
 ./model_test
 ```
 
