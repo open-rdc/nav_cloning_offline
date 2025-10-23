@@ -23,7 +23,7 @@
 
   ![collect\_data\_resize](https://github.com/YukiTakahashi4690/nav_cloning/assets/72371474/d3e43a62-31b8-4a51-b581-4c9d201a0ebb)
 
-### 走行によるデータ収集
+### 自律移動によるデータ収集
 
 * **目的**：3カメラまたは9カメラを使って走行中にデータ取得
 * **実行コマンド（例：3カメラ）**：
@@ -32,7 +32,17 @@
   roslaunch nav_cloning nav_cloning_sim.launch script:=run_collect_3cam.py use_waypoint_nav:=true
   ```
   ※ 9cam版はスクリプト名を変更して使用してください。
-  
+  ※任意の走行終了ポイントでプログラムを停止してください
+
+### コントローラ走行によるデータ収集
+
+* **目的**：コントローラを使用して走行、手動でデータを収集
+* **実行コマンド（例：3カメラ）**：
+
+  ```bash
+  roslaunch nav_cloning nav_cloning_sim.launch script:=run_collect_3cam_sim_contllor.py use_waypoint_nav:=false
+  ```
+※任意の走行終了ポイントでプログラムを停止してください
 ---
 
 ## 2. オフライン学習
@@ -58,6 +68,13 @@ roscd nav_cloning/sh/learning
 ./learning_run_3cam.sh
 ```
 
+### 3cam走行データを画像拡張し学習
+
+```bash
+roscd nav_cloning/sh/learning
+./learning_viewpoint_aug.sh
+```
+※9camと3camの画像拡張については安定した経路追従を確認しています
 ---
 
 ## 3. モデルテスト・経路追従評価
