@@ -16,6 +16,7 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from yaml import load
+import roslib
 
 
 # HYPER PARAM
@@ -92,7 +93,8 @@ class deep_learning:
         self.transform=transforms.Compose([transforms.ToTensor()])
         self.first_flag =True
         torch.backends.cudnn.benchmark = True
-        self.writer = SummaryWriter(log_dir="/home/koyama-yuya/ros_ws/nav_cloning_offline_for_study_ws/src/nav_cloning/runs",comment="log_1")
+        self.writer = SummaryWriter(log_dir=roslib.packages.get_pkg_dir('nav_cloning') + '/runs/',comment="log_1")
+        
 
     def make_dataset(self,img,target_angle):
         # self.device = torch.device('cpu')
