@@ -43,17 +43,10 @@ class CourseFollowingLearningNode:
         # 各レーン・視点ごとの角速度補正値
         shifts = {
             (1, 'center'):  0.022552916,
-            (1, 'left')  : -0.0486526322458927,
-            (1, 'right') :  0.0861816156644032,
             (2, 'center'): -0.289712051031864,
-            (2, 'left')  : -0.252415274370429,
-            (2, 'right') : -0.302315412659561,
             (3, 'center'):  0.289517402543431,
-            (3, 'left')  :  0.296489666115526,
-            (3, 'right') :  0.277030770948767
         }
 
-        img_types = ["center", "left", "right"]
         images = []
 
         for lane in range(1, 4):  # lane1〜3
@@ -65,21 +58,14 @@ class CourseFollowingLearningNode:
                 print(f"Warning: Failed to load {center_img_file}")
                 continue
 
-            for img_type in img_types:
-                angle_shift = shifts[(lane, img_type)]
+            angle_shift = shifts[(lane, "center")]
+            img = center_img.copy()
+            
+            if img is None:
+                print(f"Warning: Failed to generate {img_type} image for lane{lane}, index {index}")
+                continue
 
-                if img_type == 'left':
-                    img = self.simulate_disparity(center_img, angle_deg=-5)
-                elif img_type == 'right':
-                    img = self.simulate_disparity(center_img, angle_deg=5)
-                else:  # center
-                    img = center_img.copy()
-                
-                if img is None:
-                    print(f"Warning: Failed to generate {img_type} image for lane{lane}, index {index}")
-                    continue
-
-                images.append((img, angle_shift))
+            images.append((img, angle_shift))
 
         return images
         
@@ -90,37 +76,6 @@ class CourseFollowingLearningNode:
                 _, tar_ang = row
                 angles.append(float(tar_ang))
         return angles
-
-    def simulate_disparity(self, center_img, angle_deg=0):
-        h, w = center_img.shape[:2]  # 画像の高さと幅を取得
-
-        # カメラ内部パラメータの計算
-        horizontal_fov = 2.09  # 水平方向の視野角（ラジアン：約120度）
-        # 焦点距離fを画素単位で計算（画像の中心から端までの距離 / tan(FOV/2)）
-        f = (w / 2) / math.tan(horizontal_fov / 2)
-        # 画像中心座標
-        cx, cy = w / 2, h / 2
-
-        # カメラ内部パラメータ行列Kを作成
-        K = np.array([[f, 0, cx],
-                    [0, f, cy],
-                    [0, 0, 1]])
-
-        # y軸回転行列R（角度angle_deg度をラジアンに変換）
-        angle_rad = math.radians(angle_deg)
-        R = np.array([[ math.cos(angle_rad), 0, math.sin(angle_rad)],
-                    [0,                 1, 0],
-                    [-math.sin(angle_rad),0, math.cos(angle_rad)]])
-
-        # 射影変換行列Hを計算（K * R * Kの逆行列）
-        H = K @ R @ np.linalg.inv(K)
-        # 正規化（射影変換行列の右下の値を1に）
-        H /= H[2, 2]
-
-        # 射影変換を元画像に適用し、新しい視点画像を生成
-        warped = cv2.warpPerspective(center_img, H, (w, h))
-
-        return warped
 
     def save_loss(self, loss_log):
         model_index = int(self.model_num) + 1  # 0列目はEpoch番号にするため+1
