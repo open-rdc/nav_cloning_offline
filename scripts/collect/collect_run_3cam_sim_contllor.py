@@ -94,7 +94,6 @@ class cource_following_learning_node:
     def callback_vel(self, data):
         self.vel = data
         self.action = self.vel.angular.z
-
         # パブリッシュ
         self.nav_pub.publish(self.vel)
 

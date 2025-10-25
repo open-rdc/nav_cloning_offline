@@ -10,7 +10,7 @@
       <arg name="num" default="1"/>
       <arg name="world_name" default="willow_garage.world"/>
       <arg name="map_file" default="willowgarage.yaml"/>
-      <arg name="waypoints_file" default="willow_loop_waypoint_nav_shirasu.yaml"/>
+      <arg name="waypoints_file" default="willow_loop_waypoint_nav.yaml"/>
       <arg name="rate" default="0.1" />
       <arg name="dist_err" default="0.8"/>
       
