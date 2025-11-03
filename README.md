@@ -93,16 +93,45 @@ roscd nav_cloning/sh/model_test
 ./model_test
 ```
 
-### 特定のモデル出力を確認
+### 特定のモデル出力のみを確認（衝突判定なし）
 
 ```bash
-roslaunch nav_cloning nav_cloning_sim.launch script:=model_test.py use_waypoint_nav:=true use_cmd_vel:=false model_num:=1
+roscd nav_cloning/sh/model_test
+./model_loader_debug.sh
 ```
 
 ### モデルの経路復帰性能を評価
 経路周辺に移動するためのpath.csvがない場合、以下で作成
 ```bash
 roslaunch nav_cloning nav_cloning_sim.launch script:=path_collector.py
+```
+
+経路復帰性能を評価
+```bash
+roscd nav_cloning/sh/analysis
+./path_recovery_evaluator.sh
+```
+※ 上記コマンドにより、経路から逸脱した際の復帰挙動も確認可能
+
+---
+
+### 実環境
+以下がインストールされているものとする
+https://github.com/open-rdc/icart
+https://github.com/open-rdc/orne-box
+それぞれ別ターミナルで
+```bash
+roslaunch orne_box_bringup orne_gamma.launch 
+```
+```bash
+roslaunch nav_cloning camera_bringup.launch
+```
+```bash
+roslaunch icart_mini_driver teleop_joy.launch 
+```
+```bash
+
+./collect_run_3cam_real.sh
 ```
 
 経路復帰性能を評価

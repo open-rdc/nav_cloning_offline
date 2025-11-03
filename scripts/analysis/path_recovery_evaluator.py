@@ -28,13 +28,14 @@ class PathRecoveryEvaluator:
         self.vel = Twist()
 
         self.action_num = 1
-        self.pro = rospy.get_param("/nav_cloning_node/model_dir", "20250517_12:49:45")
+        self.pro = "20251025_16:43:08"  # データセットの識別名
+        self.path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/'
         self.model_num = rospy.get_param("/nav_cloning_node/model_num", "1")
         self.initial_pose_x = -10.71378
         self.initial_pose_y = -17.17456
 
         self.dl = deep_learning(n_action=self.action_num)
-        load_path = roslib.packages.get_pkg_dir('nav_cloning') + f'/data/model/{self.pro}/model{self.model_num}.pt'
+        load_path = self.path + f"model/{self.pro}/model{self.model_num}.pt"
         self.dl.load(load_path)
         rospy.loginfo(f"Loaded model from: {load_path}")
 
@@ -48,14 +49,16 @@ class PathRecoveryEvaluator:
         self.cur_pose = None
         self.cur_yaw = 0.0
 
+        os.makedirs(self.path + f"analysis/{self.pro}/", exist_ok=True)
+
         # CSVファイル初期化
-        self.csv_path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/analysis/path_trajectory.csv'
+        self.csv_path = self.path + f"analysis/{self.pro}/recovery_trajectory.csv"
         with open(self.csv_path, 'w', newline='') as f:
             writer = csv.writer(f)
             
         self.path_no = 0
 
-        csv_path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/path/path_for_recovery_evaluator.csv'
+        csv_path = self.path + 'path/path_for_recovery_evaluator.csv'
         with open(csv_path, 'r') as f:
             self.pos_list = [line.strip().split(',') for line in f]
 
