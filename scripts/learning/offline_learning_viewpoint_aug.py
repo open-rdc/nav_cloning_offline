@@ -25,15 +25,15 @@ class CourseFollowingLearningNode:
 
         self.start_time = time.strftime("%Y%m%d_%H:%M:%S")
         self.model_num = str(sys.argv[1])
-        self.pro = "20251015_15:45:01"  # データセットの識別名
+        self.pro = "20251101_16:38:30"  # データセットの識別名
         self.path = roslib.packages.get_pkg_dir('nav_cloning') + '/data/'
         self.save_path = self.path + f"model/{self.pro}/model{self.model_num}.pt"
         self.ang_path = self.path + f"ang/{self.pro}"
         self.img_path = self.path + f"img/{self.pro}"
         self.loss_path =  self.path + f"loss/{self.pro}/{self.pro}.csv"
 
-        self.data =  431 # 使用するデータ数
-        self.BATCH_SIZE = 64 # バッチサイズを指定
+        self.data =  419 # 使用するデータ数
+        self.BATCH_SIZE = 32 # バッチサイズを指定
         self.EPOCHS = 300 # エポック数を指定
         
         os.makedirs(os.path.dirname(self.save_path), exist_ok=True)
